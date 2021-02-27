@@ -17,6 +17,10 @@ const myToken = process.env.TOKEN;
 const client = new Discord.Client();
 const prefix = 'µ';
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function listEvents(auth, message, args) {
   const calendar = google.calendar({ version: 'v3', auth });
   let today = new Date();
@@ -58,7 +62,7 @@ function listEvents(auth, message, args) {
       message.channel.send(schedule);
     });
   } else {
-    message.channel.send("Merci de préciser un emploi du temps valide à afficher, tapez µhelp pour avoir la liste.");
+    message.channel.send("Merci de préciser un emploi du temps valide à afficher, tapez µhelp pour avoir la liste.").then(async sent => { await sleep(3000); sent.delete() });
   }
 }
 
@@ -74,13 +78,39 @@ client.on('message', async message => {
   const command = args.shift().toLowerCase();
   switch (command) {
     case 'edt':
+      message.delete();
       fs.readFile(creds, (err, content) => {
         if (err) return console.log('Error loading client secret file:', err);
         auth.authorize(JSON.parse(content), listEvents, message, args);
       });
       break;
     case 'help':
-
+      message.delete();
+      let myEmbed = {
+        title: 'O SEKOUR',
+        color: '0099ff',
+        description: 'µ est le préfixe par défaut ! µhelp pour afficher l\'aide !',
+        fields: [
+          {
+            name: 'edt',
+            value: 'µedt [nomClasse] [nbItems] - affiche l\'emploi du temps de la classe mentionnée.'
+          },
+          {
+            name: 'list',
+            value: 'µlist - affiche les classes disponibles.'
+          }
+        ]
+      };
+      message.channel.send({ embed: myEmbed });
+      break;
+    case 'list':
+      message.delete();
+      listeEmbed = {
+        title: 'Liste',
+        color: '0099ff',
+        description: 'ing1gi1 : ING1-GI - Groupe 1'
+      };
+      message.channel.send({ embed: listeEmbed });
       break;
   }
 });
