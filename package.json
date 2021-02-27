@@ -1,0 +1,33 @@
+{
+    "name": "edtbot",
+    "version": "1.0.0",
+    "description": "A bot to display schedule",
+    "main": "index.js",
+    "scripts": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TiltedBretzel/eisti-edt-bot.git"
+    },
+    "keywords": [
+        "bot"
+    ],
+    "author": "Thomas LEFLOCH",
+    "license": "none",
+    "bugs": {
+        "url": "https://github.com/TiltedBretzel/eisti-edt-bot/issues"
+    },
+    "homepage": "https://github.com/TiltedBretzel/eisti-edt-bot",
+    "dependencies": {
+        "discord.js": "^12.5.1",
+        "dotenv": "^8.2.0",
+        "fs": "0.0.1-security",
+        "googleapis": "^39.2.0",
+        "readline": "^1.3.0"
+    },
+    "engines": {
+        "node": "12.x",
+        "npm": "*"
+    }
+}
