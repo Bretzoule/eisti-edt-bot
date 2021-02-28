@@ -27,7 +27,7 @@ function listEvents(auth, message, args) {
   // let tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 0, 0, 0);
   // let nextTomorrow = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate() + 2, 0, 0, 0);
   let schedule = new Discord.MessageEmbed();
-  let nbElements = ((parseInt(args[args.length - 1], 10) > 0) && (parseInt(args[args.length - 1], 10) < 25)) ? parseInt(args[args.length - 1], 10) : 8;
+  let nbElements = ((parseInt(args[args.length - 1], 10) > 0) && (parseInt(args[args.length - 1], 10) <= 25)) ? parseInt(args[args.length - 1], 10) : 8;
   console.log(nbElements);
   if (args[0] != null && calendarMap.has(args[0])) {
     calendarId = calendarMap.get(args[0]);
@@ -51,7 +51,7 @@ function listEvents(auth, message, args) {
           emojiToUse = details.endsWith('CM') ? ':notebook:' : details.endsWith('EXAM') ? ':mortar_board:' : ':pencil:';
           schedule.addFields(
             {
-              name: emojiToUse + ' : ' + " le " + tableSemaine[myCurrentTime.getDay()] + " " + myCurrentTime.getUTCDate() + " " + tableMois[myCurrentTime.getMonth()] + ' à ' + myCurrentTime.getUTCHours() + ":" + myCurrentTime.getUTCMinutes(),
+              name: emojiToUse + ' : ' + " le " + tableSemaine[myCurrentTime.getDay()] + " " + myCurrentTime.getUTCDate() + " " + tableMois[myCurrentTime.getMonth()] + ' à ' + myCurrentTime.toLocaleTimeString(),
               value: details
             }
           );
