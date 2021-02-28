@@ -6,8 +6,8 @@ const { ml } = require("googleapis/build/src/apis/ml");
 const auth = require('./auth/auth');
 const creds = './auth/credentials.json';
 
-let calendarArray = {};
-calendarArray['ing1gi1'] = 'c_4c9sl9jjagkgdibl4450u1h038@group.calendar.google.com';
+let calendarMap = new Map();
+calendarMap.set('ing1gi1','c_4c9sl9jjagkgdibl4450u1h038@group.calendar.google.com');
 
 const tableMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 const tableSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",];
@@ -29,8 +29,8 @@ function listEvents(auth, message, args) {
   let schedule = new Discord.MessageEmbed();
   let nbElements = ((parseInt(args[args.length - 1], 10) > 0) && (parseInt(args[args.length - 1], 10) < 25)) ? parseInt(args[args.length - 1], 10) : 8;
   console.log(nbElements);
-  if (args[0] != null && typeof calendarArray[args[0]] !== undefined) {
-    calendarId = calendarArray[args[0]];
+  if (args[0] != null && calendarMap.has(args[0])) {
+    calendarId = calendarMap.get(args[0]);
     schedule.setColor('#0099ff')
       .setTitle(':books: Emploi du temps des ' + args[0] + ' :books:')
     calendar.events.list({
@@ -105,10 +105,14 @@ client.on('message', async message => {
       break;
     case 'list':
       message.delete();
+      let myDesc = "";
+      for (let key of calendarMap.keys()) {
+        myDesc += key + "\n";
+      }
       listeEmbed = {
         title: 'Liste',
         color: '0099ff',
-        description: 'ing1gi1 : ING1-GI - Groupe 1'
+        description: myDesc
       };
       message.channel.send({ embed: listeEmbed });
       break;
