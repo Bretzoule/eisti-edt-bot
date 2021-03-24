@@ -48,7 +48,7 @@ function listEvents(auth, message, args) {
           const start = event.start.dateTime;
           let details = event.summary;
           let myCurrentTime = new Date(start);
-          emojiToUse = details.endsWith('CM') ? ':notebook:' : details.endsWith('EXAM') ? ':mortar_board:' : ':pencil:';
+          emojiToUse = details.endsWith('CM S2') ? ':notebook:' : details.endsWith('EXAM S2') ? ':mortar_board:' : ':pencil:';
           schedule.addFields(
             {
               name: emojiToUse + ' : ' + " le " + tableSemaine[myCurrentTime.getDay()] + " " + myCurrentTime.getUTCDate() + " " + tableMois[myCurrentTime.getMonth()] + ' à ' + myCurrentTime.toLocaleTimeString(),
