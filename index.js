@@ -7,7 +7,7 @@ const auth = require('./auth/auth');
 const creds = './auth/credentials.json';
 
 let calendarMap = new Map();
-calendarMap.set('ing1gi1','c_4c9sl9jjagkgdibl4450u1h038@group.calendar.google.com');
+calendarMap.set('ing1gi1', 'c_4c9sl9jjagkgdibl4450u1h038@group.calendar.google.com');
 
 const tableMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 const tableSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",];
@@ -24,11 +24,10 @@ function sleep(ms) {
 function listEvents(auth, message, args) {
   const calendar = google.calendar({ version: 'v3', auth });
   let today = new Date();
-  // let tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 0, 0, 0);
-  // let nextTomorrow = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate() + 2, 0, 0, 0);
   let schedule = new Discord.MessageEmbed();
-  let nbElements = ((parseInt(args[args.length - 1], 10) > 0) && (parseInt(args[args.length - 1], 10) <= 25)) ? parseInt(args[args.length - 1], 10) : 8;
-  console.log(nbElements);
+  let nbElements = ((parseInt(args[args.length - 1], 10) > 0) && (parseInt(args[args.length - 1], 10) <= 25)) ? parseInt(args[args.length - 1], 10) : 10;
+  let myCurrentTime;
+  let details = "";
   if (args[0] != null && calendarMap.has(args[0])) {
     calendarId = calendarMap.get(args[0]);
     schedule.setColor('#0099ff')
@@ -36,26 +35,36 @@ function listEvents(auth, message, args) {
     calendar.events.list({
       calendarId: calendarId,
       timeMin: today.toISOString(),
-      maxResults: 15,
+      maxResults: nbElements,
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
       if (err) return console.log('API ERROR : ' + err);
       const events = res.data.items;
       if (events.length) {
-        schedule.setDescription('Vous avez demandé ' + nbElements + ' items.');
+        schedule.setDescription('Vous avez demandé ' + events.length + ' items.');
+        let myLastTime = new Date();
         events.map((event, i) => {
-          const start = event.start.dateTime;
-          let details = event.summary;
-          let myCurrentTime = new Date(start);
-          emojiToUse = details.endsWith('CM S2') ? ':notebook:' : details.endsWith('EXAM S2') ? ':mortar_board:' : ':pencil:';
-          schedule.addFields(
-            {
-              name: emojiToUse + ' : ' + " le " + tableSemaine[myCurrentTime.getDay()] + " " + myCurrentTime.getUTCDate() + " " + tableMois[myCurrentTime.getMonth()] + ' à ' + myCurrentTime.toLocaleTimeString(),
-              value: details
-            }
-          );
+          emojiToUse = (event.summary.endsWith('CM S2') || event.summary.endsWith('CM S1')) ? ':notebook:' : (event.summary.endsWith('EXAM S2') || event.summary.endsWith('EXAM S1')) ? ':mortar_board:' : ':pencil:';
+          myCurrentTime = new Date(event.start.dateTime);
+          myLastTime = (i == 0) ? myCurrentTime : myLastTime;
+          if (myCurrentTime.toLocaleDateString() == myLastTime.toLocaleDateString()) {
+            details += (emojiToUse + " " + myCurrentTime.toLocaleTimeString() + " : " + event.summary + "\n");
+          } else {
+            schedule.addFields(
+              {
+                name: tableSemaine[myLastTime.getDay()] + " " + myLastTime.getUTCDate() + " " + tableMois[myLastTime.getMonth()],
+                value: details
+              });
+            details = emojiToUse + " " + myCurrentTime.toLocaleTimeString() + " : " + event.summary + "\n";
+            myLastTime = myCurrentTime;
+          }
         });
+        schedule.addFields(
+          {
+            name: tableSemaine[myLastTime.getDay()] + " " + myLastTime.getUTCDate() + " " + tableMois[myLastTime.getMonth()], // to add last item
+            value: details
+          });
       } else {
         schedule.setDescription("Pas de cours demain bg.");
       }
