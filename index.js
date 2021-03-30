@@ -7,7 +7,7 @@ const auth = require('./auth/auth');
 const creds = './auth/credentials.json';
 
 let calendarMap = new Map();
-calendarMap.set('ing1gi1', 'c_4c9sl9jjagkgdibl4450u1h038@group.calendar.google.com');
+calendarMap.set('ing1gi1', '');
 
 const tableMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 const tableSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",];
@@ -49,14 +49,14 @@ function listEvents(auth, message, args) {
           myCurrentTime = new Date(event.start.dateTime);
           myLastTime = (i == 0) ? myCurrentTime : myLastTime;
           if (myCurrentTime.toLocaleDateString() == myLastTime.toLocaleDateString()) {
-            details += (emojiToUse + " " + myCurrentTime.toLocaleTimeString() + " : " + event.summary + "\n");
+            details += (emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short'}) + " : " + event.summary + "\n");
           } else {
             schedule.addFields(
               {
                 name: tableSemaine[myLastTime.getDay()] + " " + myLastTime.getUTCDate() + " " + tableMois[myLastTime.getMonth()],
                 value: details
               });
-            details = emojiToUse + " " + myCurrentTime.toLocaleTimeString() + " : " + event.summary + "\n";
+            details = emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short'}) + " : " + event.summary + "\n";
             myLastTime = myCurrentTime;
           }
         });
