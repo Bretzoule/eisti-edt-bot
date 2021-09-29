@@ -7,7 +7,7 @@ const auth = require('./auth/auth');
 const creds = './auth/credentials.json';
 
 let calendarMap = new Map();
-calendarMap.set('ing1gi1', '');
+calendarMap.set('ing2gsi2', '');
 
 const tableMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 const tableSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",];
