@@ -1,3 +1,4 @@
+const { DH_CHECK_P_NOT_PRIME } = require("constants");
 const Discord = require("discord.js");
 const fs = require('fs');
 require('dotenv').config();
@@ -5,9 +6,17 @@ const { google } = require('googleapis');
 const { ml } = require("googleapis/build/src/apis/ml");
 const auth = require('./auth/auth');
 const creds = './auth/credentials.json';
-
+const calList = require('./auth/credentials.json');
 let calendarMap = new Map();
-calendarMap.set('ing2gsi2', '');
+
+
+function parseCalendars() {
+  calList.calendars.forEach(calendar => {
+  calendarMap.set(calendar.id, calendar.url);
+ });
+}
+
+
 
 const tableMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 const tableSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",];
@@ -77,6 +86,7 @@ function listEvents(auth, message, args) {
 
 
 client.on('ready', () => {
+  parseCalendars();
   console.log("I'm on");
   client.user.setActivity("µedt pour avoir l'emploi du temps !");
 })
