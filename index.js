@@ -12,8 +12,8 @@ let calendarMap = new Map();
 
 function parseCalendars() {
   calList.calendars.forEach(calendar => {
-  calendarMap.set(calendar.id, calendar.url);
- });
+    calendarMap.set(calendar.id, calendar.url);
+  });
 }
 
 
@@ -54,18 +54,18 @@ function listEvents(auth, message, args) {
         schedule.setDescription('Vous avez demandé ' + events.length + ' items.');
         let myLastTime = new Date();
         events.map((event, i) => {
-          emojiToUse = (event.summary.endsWith('CM S2') || event.summary.endsWith('CM S1')) ? ':notebook:' : (event.summary.endsWith('EXAM S2') || event.summary.endsWith('EXAM S1')) ? ':mortar_board:' : ':pencil:';
+          emojiToUse = (event.summary.endsWith('CM S4') || event.summary.endsWith('CM S3')) ? ':notebook:' : (event.summary.endsWith('EXAM S3') || event.summary.endsWith('EXAM S4')) ? ':mortar_board:' : ':pencil:';
           myCurrentTime = new Date(event.start.dateTime);
           myLastTime = (i == 0) ? myCurrentTime : myLastTime;
           if (myCurrentTime.toLocaleDateString() == myLastTime.toLocaleDateString()) {
-            details += (emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short'}) + " : " + event.summary + "\n");
+            details += (emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short', timeZone: 'Europe/Paris' }) + " : " + event.summary + "\n");
           } else {
             schedule.addFields(
               {
                 name: tableSemaine[myLastTime.getDay()] + " " + myLastTime.getUTCDate() + " " + tableMois[myLastTime.getMonth()],
                 value: details
               });
-            details = emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short'}) + " : " + event.summary + "\n";
+            details = emojiToUse + " " + myCurrentTime.toLocaleTimeString('fr-FR', { hour12: false, timeStyle: 'short', timeZone: 'Europe/Paris' }) + " : " + event.summary + "\n";
             myLastTime = myCurrentTime;
           }
         });
