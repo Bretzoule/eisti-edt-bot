@@ -54,7 +54,7 @@ function listEvents(auth, message, args) {
         schedule.setDescription('Vous avez demandé ' + events.length + ' items.');
         let myLastTime = new Date();
         events.map((event, i) => {
-          emojiToUse = (event.summary.endsWith('CM S4') || event.summary.endsWith('CM S3')) ? ':notebook:' : (event.summary.endsWith('EXAM S3') || event.summary.endsWith('EXAM S4')) ? ':mortar_board:' : ':pencil:';
+          emojiToUse = (event.summary.includes('CM S4') || event.summary.includes('CM S3')) ? ':books:' : (event.summary.includes('EXAM S3') || event.summary.includes('EXAM S4')) ? ':mortar_board:' : ':pencil:';
           myCurrentTime = new Date(event.start.dateTime);
           myLastTime = (i == 0) ? myCurrentTime : myLastTime;
           if (myCurrentTime.toLocaleDateString() == myLastTime.toLocaleDateString()) {
